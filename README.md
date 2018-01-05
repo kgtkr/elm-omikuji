@@ -1,0 +1,1 @@
+https://kgtkr.github.io/elm-omikuji/
