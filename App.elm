@@ -1,27 +1,53 @@
 module App exposing (..)
 
-import Html exposing (Html, div, text, program)
+import Omikuji exposing (Omikuji)
+import Html exposing (Html)
+import Html.Events exposing (onClick)
+
 
 type alias Model =
-    String
+    Maybe Omikuji
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( "Hello", Cmd.none )
+    ( Nothing, Cmd.none )
+
 
 type Msg
-    = NoOp
+    = UpdateOmikuji (Maybe Omikuji)
+    | ClickOmikuji
+    | NoOp
+
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ text model ]
+    Html.div [ onClick ClickOmikuji ]
+        [ Html.text
+            (case model of
+                Just data ->
+                    Omikuji.name data
+
+                Nothing ->
+                    "引く"
+            )
+        ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        UpdateOmikuji omikuji ->
+            ( omikuji, Cmd.none )
+
+        ClickOmikuji ->
+            case model of
+                Just _ ->
+                    ( Nothing, Cmd.none )
+
+                Nothing ->
+                    ( model, Omikuji.random |> Cmd.map (Just >> UpdateOmikuji) )
+
         NoOp ->
             ( model, Cmd.none )
 
@@ -33,7 +59,7 @@ subscriptions model =
 
 main : Program Never Model Msg
 main =
-    program
+    Html.program
         { init = init
         , view = view
         , update = update
