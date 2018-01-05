@@ -1,8 +1,9 @@
 module App exposing (..)
 
+import Html.Attributes exposing (..)
 import Omikuji exposing (Omikuji)
-import Html exposing (Html)
-import Html.Events exposing (onClick)
+import Html exposing (..)
+import Html.Events exposing (..)
 
 
 type alias Model =
@@ -22,15 +23,51 @@ type Msg
 
 view : Model -> Html Msg
 view model =
-    Html.div [ onClick ClickOmikuji ]
-        [ Html.text
-            (case model of
-                Just data ->
-                    Omikuji.name data
+    div
+        [ style
+            [ ( "height", "100%" )
+            , ( "display", "flex" )
+            , ( "justify-content", "center" )
+            , ( "align-items", "center" )
+            ]
+        ]
+        [ button
+            [ onClick ClickOmikuji
+            , style
+                [ ( "width", "128px" )
+                , ( "height", "128px" )
+                , ( "font-size", "36px" )
+                , ( "color"
+                  , (case model of
+                        Just _ ->
+                            "red"
 
-                Nothing ->
-                    "引く"
-            )
+                        Nothing ->
+                            "#fff"
+                    )
+                  )
+                , ( "background"
+                  , (case model of
+                        Just _ ->
+                            "#fff"
+
+                        Nothing ->
+                            "red"
+                    )
+                  )
+                , ( "border-radius", "64px" )
+                , ( "border", "1px solid #000" )
+                ]
+            ]
+            [ text
+                (case model of
+                    Just data ->
+                        Omikuji.name data
+
+                    Nothing ->
+                        "引く"
+                )
+            ]
         ]
 
 
@@ -59,7 +96,7 @@ subscriptions model =
 
 main : Program Never Model Msg
 main =
-    Html.program
+    program
         { init = init
         , view = view
         , update = update
