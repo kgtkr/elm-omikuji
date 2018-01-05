@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "elm-reactor --port 3000",
-    "build": "npm install gh-pages --save-dev",
+    "build": "elm-make App.elm --output=dist/index.html",
     "deploy": "gh-pages -d dist"
   },
   "keywords": [],
